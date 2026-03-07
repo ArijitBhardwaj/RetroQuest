@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#1A0533" />
+  <title>A Journey to You ♥</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #1A0533;
+      overflow: hidden;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    /* Phaser renders into this container — it handles centering internally */
+    #game-container {
+      width: 100%;
+      height: 100%;
+    }
+    canvas {
+      display: block;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      image-rendering: -moz-crisp-edges;
+    }
+  </style>
+  <!-- Google Fonts: Press Start 2P (pixel font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <!-- Phaser mounts the canvas inside this container -->
+  <div id="game-container"></div>
+
+  <!-- Phaser 3 game engine -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+
+  <!-- Personal content (EDIT THIS FILE to personalise!) -->
+  <script src="data/messages.js"></script>
+
+  <!-- Game objects -->
+  <script src="objects/Player.js"></script>
+  <script src="objects/MobileControls.js"></script>
+
+  <!-- Scenes (order matters — Boot must be first) -->
+  <script src="scenes/BootScene.js"></script>
+  <script src="scenes/PreloadScene.js"></script>
+  <script src="scenes/MenuScene.js"></script>
+  <script src="scenes/GameScene.js"></script>
+  <script src="scenes/EndScene.js"></script>
+
+  <!-- Main Phaser config (runs last) -->
+  <script src="game.js"></script>
+</body>
+</html>
