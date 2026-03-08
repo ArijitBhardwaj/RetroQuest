@@ -273,16 +273,19 @@ const PHOTO_REVEAL = (() => {
 
   function _dismiss() {
     clearTimeout(_autoDismissTimer);
-    if (!_overlay || !_overlay.classList.contains('visible')) return;
+    if (!_overlay) return;
+    // Check if the overlay is currently visible (CSS transition may not have started yet)
+    const wasVisible = _overlay.classList.contains('visible');
     _overlay.classList.remove('visible');
-    // Wait for CSS fade-out (0.55s) + img scale transition before hiding
+    // If it was visible: wait for CSS fade-out (600ms). If not yet visible: fire immediately (0ms).
+    // IMPORTANT: always fire callback — never skip it, or _popupActive stays true forever.
     setTimeout(() => {
       _overlay.style.display = 'none';
-      _img.src = '';
+      if (_img) _img.src = '';
       const cb = _cb;
       _cb = null;
       if (cb) cb();
-    }, 600);
+    }, wasVisible ? 600 : 0);
   }
 
   return {

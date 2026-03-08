@@ -430,10 +430,9 @@ class GameScene extends Phaser.Scene {
       PHOTO_REVEAL.show(photo, () => {
         this.physics.resume();
         this._popupActive = false;
-        if (this._controls) {
-          this._controls.jumpPressed = false;
-          this._controls.jumpHeld    = false;
-        }
+        // Reset ALL mobile control state — Phaser misses pointerup events
+        // while the DOM overlay covers the canvas, leaving leftDown/rightDown stuck.
+        if (this._controls) this._controls.reset();
       });
     }
   }
@@ -627,11 +626,8 @@ class GameScene extends Phaser.Scene {
         this._popupEls = [];
         this._popupActive = false;
         this.physics.resume();
-        // Clear touch state to prevent phantom jump on Samsung after overlay tap
-        if (this._controls) {
-          this._controls.jumpPressed = false;
-          this._controls.jumpHeld    = false;
-        }
+        // Reset ALL mobile control state after any popup dismisses
+        if (this._controls) this._controls.reset();
         if (this._popupQueue.length > 0) this.time.delayedCall(180, () => this._showNextPopup());
       },
     });
