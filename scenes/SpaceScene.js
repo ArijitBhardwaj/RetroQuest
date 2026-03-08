@@ -505,11 +505,13 @@ class SpaceScene extends Phaser.Scene {
   }
 
   _collectPowerup(pu) {
-    // Guard: never show the powerup photo after the wave is cleared or game is done.
-    // Without this, _updatePowerup and _checkCrystal can both fire in the same
-    // update() tick — powerup sets _paused=true first, then victory sets state='done',
-    // leading to photo8 appearing after photo9.
-    if (this._waveCleared || this._state !== 'playing') return;
+    // Block collection once the crystal is on screen.
+    // If collected in the same tick the crystal overlaps the player, both
+    // _updatePowerup and _checkCrystal run — this guard ensures photo8 can
+    // never fire after photo9 has already been triggered.
+    // During the 2.5 s window between wave-clear and crystal spawn, _crystal
+    // is null, so the player CAN still collect the powerup normally.
+    if (this._crystal || this._state !== 'playing') return;
 
     const ex = pu.x, ey = pu.y;
     pu.destroy();
