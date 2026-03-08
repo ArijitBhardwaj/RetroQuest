@@ -391,12 +391,11 @@ class SpaceScene extends Phaser.Scene {
     if (this._waveStarted && !this._waveCleared && this._enemies.length === 0) {
       this._waveCleared = true;
 
-      // Destroy any uncollected powerup — prevents photo8 from appearing
-      // after photo9 if the player flew through the powerup while chasing the crystal.
-      if (this._powerupSprite && this._powerupSprite.active) {
-        this._powerupSprite.destroy();
-        this._powerupSprite = null;
-      }
+      // NOTE: do NOT destroy the powerup here. _collectPowerup already guards
+      // against photo8 appearing post-wave via the `this._waveCleared` check —
+      // and _updateEnemies always runs before _updatePowerup in the same tick,
+      // so the flag is set before any collection overlap is evaluated.
+      // Destroying it here would pop it off-screen the instant the last enemy dies.
 
       this._showBanner('✦ Wave Cleared! ✦', 1600);
       this.time.delayedCall(2500, () => this._spawnCrystal());
