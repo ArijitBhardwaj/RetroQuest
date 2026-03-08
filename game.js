@@ -35,9 +35,13 @@ const config = {
     },
   },
 
-  // Allow up to 4 simultaneous touch points (move + jump + spare fingers)
+  // Allow many simultaneous touch points.
+  // IMPORTANT: keep this high. The DOM photo overlay intercepts touchend events,
+  // leaving Phaser pointer slots in a "stuck" state. Each photo reveal can orphan
+  // 1–2 slots. With 7 photo reveals × 2 fingers = 14 possible orphans, we need at
+  // least 15+ slots so Phaser never runs out and silently drops new touches.
   input: {
-    activePointers: 4,
+    activePointers: 20,
   },
 
   // Scene order = startup order

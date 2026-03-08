@@ -430,9 +430,13 @@ class GameScene extends Phaser.Scene {
       PHOTO_REVEAL.show(photo, () => {
         this.physics.resume();
         this._popupActive = false;
-        // Reset ALL mobile control state — Phaser misses pointerup events
-        // while the DOM overlay covers the canvas, leaving leftDown/rightDown stuck.
+        // reset() clears MobileControls state AND frees Phaser pointer slots
+        // that got stuck while the DOM overlay was covering the canvas.
         if (this._controls) this._controls.reset();
+        // Re-focus the canvas so Samsung browser routes touch events back to it.
+        // The DOM overlay steals browser focus; without this, subsequent touches
+        // can be silently swallowed by the browser before reaching the canvas.
+        try { this.game.canvas.focus(); } catch (e) {}
       });
     }
   }

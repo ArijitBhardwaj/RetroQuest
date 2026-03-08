@@ -49,19 +49,42 @@ class MobileControls {
   }
 
   // ── Called when a photo overlay dismisses — resets ALL touch state ────────
-  // Phaser misses pointerup events while the DOM overlay covers the canvas,
-  // so leftDown/rightDown/_moveTouchId can get stuck. This clears everything.
+  // The DOM photo overlay (z-index:9999) intercepts touchend events while it
+  // is visible. Phaser's canvas never sees those touchend events, so its
+  // internal Pointer objects stay stuck: active=true, isDown=true. Each stuck
+  // pointer occupies a slot in Phaser's pool. Once the pool is full, Phaser
+  // silently drops new touchstart events — no pointerdown fires, player freezes.
+  // This method:
+  //   1. Clears MobileControls' own bookkeeping
+  //   2. Force-releases all Phaser touch pointer slots so they can be reused
   reset() {
-    this.leftDown         = false;
-    this.rightDown        = false;
-    this.jumpPressed      = false;
-    this.jumpHeld         = false;
-    this._moveTouchId     = null;
-    this._jumpTouchId     = null;
+    // ── MobileControls state ─────────────────────────────────────────────────
+    this.leftDown          = false;
+    this.rightDown         = false;
+    this.jumpPressed       = false;
+    this.jumpHeld          = false;
+    this._moveTouchId      = null;
+    this._jumpTouchId      = null;
     this._rightJumpWasDown = false;
-    this._swipeJumpActive = false;
+    this._swipeJumpActive  = false;
     this._hideRing();
     this._jumpHint.setAlpha(0.45);
+
+    // ── Phaser internal pointer pool ─────────────────────────────────────────
+    // Skip pointers[0] — that is always the mouse pointer, never a touch.
+    // For every touch pointer that is still "active" (stuck because its touchend
+    // was swallowed by the DOM overlay), mark it free so Phaser can reuse the slot.
+    try {
+      const ptrs = this.scene.input.manager.pointers;
+      for (let i = 1; i < ptrs.length; i++) {
+        if (ptrs[i] && ptrs[i].active) {
+          ptrs[i].isDown = false;
+          ptrs[i].active = false;
+        }
+      }
+    } catch (e) {
+      // Defensive — if Phaser's internals differ across builds, fail silently.
+    }
   }
 
   // ── UI ───────────────────────────────────────────────────────────────────
