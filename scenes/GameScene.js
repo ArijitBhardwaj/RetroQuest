@@ -21,129 +21,129 @@
 // ─── Level data ──────────────────────────────────────────────────────────────
 //
 // Physics recap (from game.js):
-//   PLAYER_SPEED    = 220 px/s   PLAYER_JUMP_VEL = -630 px/s   GRAVITY = 900 px/s²
-//   Max jump height ≈ 220 px     Safe horizontal gap ≤ 270 px
-//   From a platform at y=P, player can reach y = P − 220 in one jump.
+//   PLAYER_SPEED    = 220 px/s   PLAYER_JUMP_VEL = -600 px/s   GRAVITY = 900 px/s²
+//   Max jump height ≈ 200 px     Safe horizontal gap ≤ 270 px
+//   Each vertical step in this level is ≤ 150 px — comfortable margin of safety.
 //
-// ─── Physics reference ────────────────────────────────────────────────────────
-// PLAYER_SPEED=220 px/s  JUMP_VEL=-630  GRAVITY=900
-// Max jump height ≈ 220 px   Max jump horizontal ≈ 308 px at full speed
-// Platform width: 100 px,  horizontal gap between adjacent platforms: 120 px
+// Vertical design goal: use the FULL 854 px screen height.
+//   Ground at y=790, Act 1 peaks at y=220–320, staircase summit at y≈280.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const PLATFORM_DATA = [
 
   // ═══ ACT 1 — The Beginning ════════════════════════════════════════════════
-  // Design: uniform 100 px wide platforms, 120 px gaps, dramatic vertical arc.
-  // Shape: gentle ramp UP → valley → higher ramp UP → ramp DOWN → bridge
+  // Grand vertical arc using the FULL screen height (854 px).
+  // PEAK 1 at y=320 → 470 px above ground.
+  // PEAK 2 at y=220 → 570 px above ground — player sees the entire level below!
+  //
+  // Physics recap (game.js):
+  //   PLAYER_SPEED=220  PLAYER_JUMP_VEL=-600  GRAVITY=900
+  //   Max jump height ≈ 200 px   Each vertical step ≤ 150 px (safe margin)
   //
   [0, 790, 2800, 64, 'ground_tile'],
 
-  // ── Intro ramp: y 752 → 520, uniform +66 px each step ──
-  [210,  752, 100, 16, 'platform_grass'],
-  [430,  706, 100, 16, 'platform_grass'],
-  [650,  652, 100, 16, 'platform_grass'],   // ← Letter 0 floats 36 px above
-  [870,  590, 100, 16, 'platform_grass'],
-  [1090, 520, 100, 16, 'platform_grass'],   // PEAK 1  (270 px above ground)
+  // ── Intro ramp: ground → PEAK 1 at y=320 ──
+  [210,  720, 100, 16, 'platform_grass'],   //  70 px above ground — easy first hop
+  [430,  630, 100, 16, 'platform_grass'],   //  90 px higher
+  [650,  530, 100, 16, 'platform_grass'],   // 100 px higher  ← Letter 0 above
+  [870,  420, 100, 16, 'platform_grass'],   // 110 px higher
+  [1090, 320, 100, 16, 'platform_grass'],   // PEAK 1 — 470 px above ground!
 
-  // ── Valley: intentional drop to feel the altitude change ──
-  [1280, 748, 100, 16, 'platform_grass'],   // low valley floor
+  // ── Valley: dramatic 400 px fall ──
+  [1280, 720, 100, 16, 'platform_grass'],
 
-  // ── Second climb: y 666 → 490, higher than first peak ──
-  [1480, 666, 100, 16, 'platform_grass'],   // ← Letter 1 floats 36 px above
-  [1700, 578, 100, 16, 'platform_grass'],
-  [1920, 490, 100, 16, 'platform_grass'],   // PEAK 2  (300 px above ground)
+  // ── Second climb: valley → PEAK 2 at y=220 ──
+  [1480, 630, 100, 16, 'platform_grass'],   // ← Letter 1 above
+  [1700, 500, 100, 16, 'platform_grass'],
+  [1920, 360, 100, 16, 'platform_grass'],
+  [2080, 220, 100, 16, 'platform_grass'],   // PEAK 2 — 570 px above ground!
 
-  // ── Descent: smooth staircase down ──
-  [2120, 578, 100, 16, 'platform_grass'],   // ← Letter 2 floats 36 px above
-  [2340, 672, 100, 16, 'platform_grass'],
-  [2540, 742, 100, 16, 'platform_grass'],
-  [2720, 762, 100, 16, 'platform_grass'],   // bridge step into Act 2
+  // ── Descent to bridge ──
+  [2250, 340, 100, 16, 'platform_grass'],   // ← Letter 2 above
+  [2430, 490, 100, 16, 'platform_grass'],
+  [2610, 640, 100, 16, 'platform_grass'],
+  [2760, 730, 100, 16, 'platform_grass'],   // bridge step into Act 2
 
   // ═══ ACT 2 — The Adventure ════════════════════════════════════════════════
   // Three ground sections separated by two canyons, then the staircase gauntlet.
   //
-  //   GAP A: x 3200–3440  (240 px — requires the moving bridge)
-  //   GAP B: x 3880–4160  (280 px — requires the elevator or a near-max jump)
+  //   GAP A: x 3200–3440  (240 px — requires the moving bridge at y=490)
+  //   GAP B: x 3880–4160  (280 px — requires the elevator)
   //
   [2800, 790, 400, 64, 'ground_tile'],   // 2800–3200
   [3440, 790, 440, 64, 'ground_tile'],   // 3440–3880
   [4160, 790, 140, 64, 'ground_tile'],   // 4160–4300
   [5260, 790, 360, 64, 'ground_tile'],   // 5260–5620  boarding zone
 
-  // ── Approach to GAP A: two clear stepping stones ──
-  [2950, 706, 110, 16, 'platform_stone'],  // first ledge up from ground
-  [3110, 638, 110, 16, 'platform_stone'],  // ← Letter 3 floats 34 px above
+  // ── Approach to GAP A: dramatic two-step climb ──
+  [2950, 640, 110, 16, 'platform_stone'],  // first ledge — 150 px above ground
+  [3110, 490, 110, 16, 'platform_stone'],  // upper ledge  ← Letter 3 above
 
-  // ── Between GAPs: three distinct heights (LOW → MID → HIGH) ──
-  // Direct MID→HIGH jump = 124 px (doable).
-  // Or use CRUMBLE A [3800,550] as a gentler two-step bridge (see CRUMBLE_DATA).
-  [3530, 724, 110, 16, 'platform_stone'],  // LOW  landing after bridge
-  [3700, 614, 100, 16, 'platform_stone'],  // MID  (110 px above LOW)
-  [3860, 490, 100, 16, 'platform_stone'],  // HIGH (124 px above MID) ← Star 0 above
+  // ── Between GAPs: LOW → MID → HIGH ──
+  // CRUMBLE A [3800,430] provides a comfy two-step shortcut (see CRUMBLE_DATA).
+  [3530, 680, 110, 16, 'platform_stone'],  // LOW  landing from bridge
+  [3700, 520, 100, 16, 'platform_stone'],  // MID  160 px above LOW
+  [3860, 340, 100, 16, 'platform_stone'],  // HIGH 180 px above MID  ← Star 0 above
 
-  // ── Pre-staircase: see CRUMBLE_DATA for CRUMBLE B (Letter 4 ledge) ──
-  // No additional static platforms — crumble B overlaps P1 for a direct jump-off.
+  // ── Pre-staircase: CRUMBLE B [4220,620] holds Letter 4 ──
 ];
 
 // Regular moving platforms — [startX_left, startY_top, width, axis, range_px, dur_ms]
 const MOVING_DATA = [
   // BRIDGE — horizontal, spans GAP A.
-  // Teaches moving platforms. At rightmost position it's only 30 px from ground.
-  [3200, 660, 110, 'x', 100, 1600],
+  // Raised to y=490 to align with the upper approach platform [3110,490].
+  // Player steps straight across at the same height — no awkward drop onto the bridge.
+  [3200, 490, 110, 'x', 100, 1600],
 
-  // ELEVATOR — vertical, rises 255 px.
-  // Sits squarely inside GAP B (3880–4160).  Cleanly separated from the HIGH ledge.
-  // At peak it also lets the player access Star 0 from the left (if they can time it).
-  [4000, 724, 110, 'y', -255, 1800],
+  // ELEVATOR — vertical, rises 310 px (extended range to service the HIGH ledge at y=340).
+  // Sits squarely inside GAP B (3880–4160).
+  // At peak (y≈390) a short fall reaches the HIGH platform; at bottom player walks to ground.
+  [4000, 700, 110, 'y', -310, 1800],
 ];
 
 // Crystal staircase — vertical oscillators
-// 6 platforms · 90–140 px horizontal gaps · moderate range, readable rhythm
-// Arc: climbs from P1→P3 (summit), then descends P4→P6 (exit runway)
+// 6 platforms · dramatic range · arc climbs P1→P3 to SUMMIT at y≈280, then descends.
+// Each step ≤ 150 px vertical — reachable with a well-timed running jump.
 const STAIRCASE_DATA = [
-  [4310, 730, 110, -130, 2100],   // P1 — y 730 → 600  (entry step)
-  [4510, 660, 110, -130, 1950],   // P2 — y 660 → 530  (climbing)
-  [4720, 580, 110, -140, 2250],   // P3 — y 580 → 440  SUMMIT  ← Star 1 above
-  [4970, 660, 110, -130, 2050],   // P4 — y 660 → 530  (descending)
-  [5140, 718, 110, -110, 2150],   // P5 — y 718 → 608
-  [5260, 760,  95,  -90, 2350],   // P6 — y 760 → 670  exit onto boarding ground
+  [4310, 720, 110, -150, 2100],   // P1 — y 720 → 570  (entry step)
+  [4510, 620, 110, -170, 1950],   // P2 — y 620 → 450  (climbing)
+  [4720, 480, 110, -200, 2250],   // P3 — y 480 → 280  SUMMIT  ← Star 1 above
+  [4970, 590, 110, -170, 2050],   // P4 — y 590 → 420  (descending)
+  [5130, 690, 110, -140, 2150],   // P5 — y 690 → 550
+  [5250, 750,  95, -100, 2350],   // P6 — y 750 → 650  exit onto boarding ground
 ];
 
 // Crumble platforms — "seep-through" ledges that reward fast, decisive play
 //
-//   CRUMBLE A  [3800, 550] — MID-to-HIGH shortcut in the mid-canyon section.
-//              Sits at the right edge of the MID platform and overlaps the left
-//              edge of the HIGH platform.  Jump from MID (+64 px) → land on
-//              crumble → jump to HIGH (+60 px).  Gives a gentler two-step
-//              alternative to the direct 124 px MID→HIGH leap.  If it crumbles
-//              while the player is on it they drop to the second ground section
-//              (safe) — no pit below.
+//   CRUMBLE A  [3800, 430] — MID-to-HIGH shortcut.
+//              MID(y=520) → crumble(y=430) = 90 px,  crumble → HIGH(y=340) = 90 px.
+//              Two comfortable steps instead of one brutal 180 px leap.
+//              Falls safely to second ground section — no pit below.
 //
-//   CRUMBLE B  [4220, 648] — Pre-staircase ledge where Letter 4 waits.
-//              Grab the letter then jump straight to P1.  Falls into the
+//   CRUMBLE B  [4220, 620] — Pre-staircase ledge where Letter 4 waits.
+//              Grab the letter then drop/jump to P1.  Falls into the
 //              third small ground section (x 4160-4300) — survivable.
 const CRUMBLE_DATA = [
-  [3800, 550,  80],   // A — MID→HIGH bridge shortcut
-  [4220, 648, 120],   // B — Letter 4 lives here, grab and leap!
+  [3800, 430,  80],   // A — MID→HIGH bridge shortcut (two 90 px hops)
+  [4220, 620, 120],   // B — Letter 4 lives here, grab and leap!
 ];
 
 // Collectibles — [x_center, y_center, type, msgKey, msgIdx, photoSrc?]
 //
 // Each collect: photo fades in (3.5 s or tap), then fades out — no text popup.
-// Heights are chosen so items float visibly above their platform but are reachable.
+// All y values updated to match the new platform heights (floats 36 px above platform top).
 //
 const COLLECTIBLE_DATA = [
-  // Act 1 — floats 36 px above platform top
-  [ 700, 616, 'letter', 'letters', 0, 'assets_provided/photo3.jpg'],
-  [1530, 630, 'letter', 'letters', 1, 'assets_provided/photo4.jpg'],
-  [2170, 542, 'letter', 'letters', 2, 'assets_provided/photo5.jpg'],
+  // Act 1 — 36 px above each platform's top edge
+  [ 700, 494, 'letter', 'letters', 0, 'assets_provided/photo3.jpg'],  // above [650,530]
+  [1530, 594, 'letter', 'letters', 1, 'assets_provided/photo4.jpg'],  // above [1480,630]
+  [2300, 304, 'letter', 'letters', 2, 'assets_provided/photo5.jpg'],  // above [2250,340]
 
   // Act 2
-  [3165, 604, 'letter', 'letters', 3, 'assets_provided/photo6.jpg'],  // above [3110,638]
-  [3910, 454, 'star',   'stars',   0, 'assets_provided/photo7.jpg'],  // above HIGH [3860,490]; 36 px float
-  [4280, 612, 'letter', 'letters', 4, 'assets_provided/photo1.jpg'],  // above CRUMBLE B [4220,648]; 36 px float
-  [4775, 372, 'star',   'stars',   1, 'assets_provided/photo2.jpg'],  // above P3 summit y≈440; 68 px float
+  [3165, 454, 'letter', 'letters', 3, 'assets_provided/photo6.jpg'],  // above [3110,490]
+  [3910, 304, 'star',   'stars',   0, 'assets_provided/photo7.jpg'],  // above HIGH [3860,340]; 36 px float
+  [4280, 584, 'letter', 'letters', 4, 'assets_provided/photo1.jpg'],  // above CRUMBLE B [4220,620]; 36 px float
+  [4775, 212, 'star',   'stars',   1, 'assets_provided/photo2.jpg'],  // above P3 summit y≈280; 68 px float
 ];
 
 // Sky zones
