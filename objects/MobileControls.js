@@ -10,7 +10,7 @@
  *   • Release → stop
  *
  * RIGHT half of screen:
- *   • Tap / hold → jump (hold longer = higher jump via variable-height mechanic)
+ *   • Tap → jump (single consistent height — no variable mechanic)
  *   • A pulsing ♥ marks the zone at all times
  *
  * No visible hard buttons. The ring appears at the exact spot you touch,

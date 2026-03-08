@@ -19,9 +19,10 @@ class EndScene extends Phaser.Scene {
   // ─── Preload ───────────────────────────────────────────────────────────────
 
   preload() {
-    // Try to load the personal photo if the user has provided one
-    if (GAME_DATA.ending && GAME_DATA.ending.showPhoto) {
-      this.load.image('end_photo', 'assets/photo.jpg');
+    const ending = GAME_DATA.ending || {};
+    if (ending.showPhoto) {
+      const src = ending.finalPhoto || 'assets_provided/final.jpg';
+      this.load.image('end_photo', src);
     }
   }
 
@@ -33,9 +34,9 @@ class EndScene extends Phaser.Scene {
     this._launchHeartExplosion();
     this._drawContent();
     this._drawReplayButton();
-
-    // Animate content in after a brief firework moment
     this._animateIn();
+
+    if (typeof AUDIO !== 'undefined') AUDIO.victory();
   }
 
   // ─── Background ────────────────────────────────────────────────────────────

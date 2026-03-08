@@ -8,85 +8,95 @@
  *
  * Instructions:
  *   1. Change `playerName` to her name
- *   2. Write 5 sweet messages for the Love Letters (💌)
- *      — Try real memories, inside jokes, or things you love about her
- *   3. Write 4 messages for the Golden Stars (⭐)
- *      — These could be her qualities, ways she makes you feel, etc.
- *   4. Write the final birthday message in `ending`
- *   5. Drop a photo named `photo.jpg` into the `assets/` folder
- *      (optional — the game works without it too)
+ *   2. Edit the 5 Love Letter messages (💌)
+ *   3. Edit the 4 Golden Star messages (⭐)
+ *   4. Edit the 2 Space Power-up messages (🚀) — found in the space level
+ *   5. Edit the final birthday message in `ending`
+ *   6. Add your photos:
+ *      - Drop TWO photos into assets_provided/ folder
+ *      - Name them: photo1.jpg and photo2.jpg  (used during the game)
+ *      - Name your final photo: final.jpg       (used at the end screen)
+ *      (Game plays fine without photos — they just skip)
  *
- * Keep messages under ~180 characters so they fit nicely in the popup card.
+ * Keep messages under ~200 characters so they fit nicely in the popup card.
  */
 
 const GAME_DATA = {
 
-  // ── Her name (shown on menu screen and end screen) ──────────────────────
-  playerName: 'My Love',
+  // ── Her name (shown on menu + end screen) ────────────────────────────────
+  playerName: 'Sandy',
 
-  // ── 5 Love Letters 💌 ───────────────────────────────────────────────────
-  // Collected in Act 1 (x3) and Act 2 (x2)
-  // Try: shared memories, things she does that make you smile, inside jokes
+  // ── 5 Love Letters 💌 ─────────────────────────────────────────────────────
   letters: [
     {
-      title: 'A Sweet Memory',
-      text:  'Replace this with your first sweet message. A real memory, an inside joke, or something that made you fall for her.',
+      title: 'First One!',
+      text:  'Already found one. Keep going — there\'s a lot more ahead.',
     },
     {
-      title: 'Something I Love',
-      text:  'Write your second message here. Maybe the way she laughs, or something only the two of you would understand.',
+      title: 'Look How High!',
+      text:  'You climbed all the way up here. Of course you did.',
     },
     {
-      title: 'A Little Moment',
-      text:  'Your third message. The little things matter the most — a quiet evening, a look, a moment you never want to forget.',
+      title: 'Still Going!',
+      text:  'Three down. Act 2 is next — things are about to get interesting.',
     },
     {
-      title: 'You and Me',
-      text:  'Your fourth message. Write something about the two of you together, where you\'ve been, or where you\'re going.',
+      title: 'Welcome to Act 2',
+      text:  'Tougher here. But you handle tough just fine.',
     },
     {
-      title: 'Just Because',
-      text:  'Your fifth message. Tell her something you\'ve always wanted to say but never quite found the right moment.',
+      title: 'Quick Hands!',
+      text:  'Grabbed it right before it crumbled. That was close.',
     },
   ],
 
-  // ── 4 Golden Stars ⭐ ───────────────────────────────────────────────────
-  // Collected in Act 2 (x2) and Act 3 (x2)
-  // Try: her personality traits, her impact on you, what makes her extraordinary
+  // ── 2 Golden Stars ⭐ ─────────────────────────────────────────────────────
   stars: [
     {
-      title: 'What Makes You Shine',
-      text:  'Write something about a quality you admire in her — something specific and true.',
+      title: 'Star Earned!',
+      text:  'That jump took nerve. Well earned.',
     },
     {
-      title: 'The Way You Are',
-      text:  'Write about the way she makes you feel — safe, happy, inspired, seen. Be honest.',
-    },
-    {
-      title: 'Your Superpower',
-      text:  'Write about something she does effortlessly that amazes you every single time.',
-    },
-    {
-      title: 'Irreplaceable',
-      text:  'Write about what makes her uniquely, perfectly, irreplaceably her.',
+      title: 'Staircase Peak!',
+      text:  'The hardest spot in the whole game. You made it.',
     },
   ],
 
-  // ── Final Birthday Screen ───────────────────────────────────────────────
-  // Shown after collecting the Crystal Heart at the very end of the level
+  // ── 2 Space Power-ups 🚀 ─────────────────────────────────────────────────
+  spacePowerups: [
+    {
+      title: 'Shields Restored!',
+      text:  'Good timing. Now finish what you started.',
+    },
+    {
+      title: 'Power Surge!',
+      text:  'Fully charged. Make this last push count.',
+    },
+  ],
+
+  // ── Photo reveals ─────────────────────────────────────────────────────────
+  photoReveals: {
+    letter3: 'assets_provided/photo1.jpg',
+    star1:   'assets_provided/photo2.jpg',
+  },
+
+  // ── Final Screen ──────────────────────────────────────────────────────────
   ending: {
-    headline: 'Happy Birthday! 🎂',
+    headline: 'Happy Birthday!',
 
-    // Your heartfelt birthday message — this is the big moment.
-    // Use \n for line breaks. Keep it authentic and from the heart.
     message:
-      'Write your birthday message here.\n\n' +
-      'She just played through a whole adventure for you.\n\n' +
-      'Make these words count. ♥',
+      'We crossed every gap,\n' +
+      'climbed every peak,\n' +
+      'and flew through space.\n\n' +
+      'I am thankful to this day\n' +
+      'that your tindi came here\n' +
+      'and met me.\n\n' +
+      'Stay happy and stay smiling.\n' +
+      'May all your wishes come true.\n\n' +
+      'I love youuu  ♥',
 
-    // If you have a photo, place it at: assets/photo.jpg
-    // Set this to true to show it, false to skip.
-    showPhoto: false,
+    showPhoto:  true,
+    finalPhoto: 'assets_provided/final.jpg',
   },
 
 };

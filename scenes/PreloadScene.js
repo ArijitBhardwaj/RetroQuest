@@ -41,6 +41,16 @@ class PreloadScene extends Phaser.Scene {
     this._genButtons();
     this._genGlowRing();
 
+    // New textures for Act 2 boarding ship + SpaceScene
+    this._genBoardingShip();
+    this._genPlayerShip();
+    this._genEnemyShip();
+    this._genBullet();
+    this._genAsteroid();
+    this._genSpacePowerup();
+    this._genMountainsBg();
+    this._genPlatformCrystal();
+
     // Short delay so the loading bar animation plays fully
     this.time.delayedCall(900, () => {
       this.scene.start('Menu');
@@ -604,6 +614,308 @@ class PreloadScene extends Phaser.Scene {
     g.strokeCircle(24, 24, 22);
 
     g.generateTexture('glow_ring', W, H);
+    g.destroy();
+  }
+
+  // ─── Boarding Ship (end of Act 2) ──────────────────────────────────────────
+  // 80×110 — large pixel-art spaceship with landing glow
+  _genBoardingShip() {
+    const W = 80, H = 110;
+    const g = this._gfx();
+
+    // Engine glow (bottom)
+    g.fillStyle(0x4466FF, 0.6);
+    g.fillEllipse(40, 104, 44, 14);
+    g.fillStyle(0x88AAFF);
+    g.fillEllipse(40, 104, 22, 8);
+
+    // Main hull — dark metallic grey
+    g.fillStyle(0x445566);
+    g.fillTriangle(40, 4, 12, 80, 68, 80);
+
+    // Hull centre panel
+    g.fillStyle(0x556677);
+    g.fillTriangle(40, 12, 22, 74, 58, 74);
+
+    // Cockpit window
+    g.fillStyle(0x88CCFF);
+    g.fillEllipse(40, 38, 20, 26);
+    g.fillStyle(0xCCEEFF);
+    g.fillEllipse(37, 34, 8, 10);
+
+    // Cockpit border
+    g.lineStyle(2, 0x2244AA);
+    g.strokeEllipse(40, 38, 20, 26);
+
+    // Left wing
+    g.fillStyle(0x334455);
+    g.fillTriangle(22, 62, 4, 82, 22, 82);
+    g.fillStyle(0x223344);
+    g.fillRect(4, 80, 18, 4);
+
+    // Right wing
+    g.fillStyle(0x334455);
+    g.fillTriangle(58, 62, 76, 82, 58, 82);
+    g.fillStyle(0x223344);
+    g.fillRect(58, 80, 18, 4);
+
+    // Engine nozzles
+    g.fillStyle(0x223344);
+    g.fillRect(28, 78, 10, 12);
+    g.fillRect(42, 78, 10, 12);
+
+    // Engine fire
+    g.fillStyle(0xFF6633);
+    g.fillEllipse(33, 92, 10, 8);
+    g.fillEllipse(47, 92, 10, 8);
+    g.fillStyle(0xFFCC44);
+    g.fillEllipse(33, 91, 5, 5);
+    g.fillEllipse(47, 91, 5, 5);
+
+    // Wing accent lights
+    g.fillStyle(0xFF4444);
+    g.fillCircle(8, 81, 3);
+    g.fillCircle(72, 81, 3);
+
+    // Hull detail lines
+    g.lineStyle(1, 0x667788);
+    g.lineBetween(30, 45, 30, 72);
+    g.lineBetween(50, 45, 50, 72);
+
+    // Top antenna
+    g.fillStyle(0x88AACC);
+    g.fillRect(38, 0, 4, 8);
+    g.fillStyle(0xFF4444);
+    g.fillCircle(40, 1, 3);
+
+    g.generateTexture('boarding_ship', W, H);
+    g.destroy();
+  }
+
+  // ─── Player Ship (SpaceScene) ───────────────────────────────────────────────
+  // 36×48 — sleek player fighter
+  _genPlayerShip() {
+    const W = 36, H = 48;
+    const g = this._gfx();
+
+    // Engine trail
+    g.fillStyle(0x4488FF, 0.5);
+    g.fillEllipse(18, 46, 14, 10);
+
+    // Main hull
+    g.fillStyle(0x4A90D9);
+    g.fillTriangle(18, 0, 4, 38, 32, 38);
+
+    // Centre stripe
+    g.fillStyle(0x66AAEE);
+    g.fillTriangle(18, 4, 12, 36, 24, 36);
+
+    // Cockpit
+    g.fillStyle(0xCCEEFF);
+    g.fillEllipse(18, 18, 10, 14);
+    g.fillStyle(0xFFFFFF);
+    g.fillEllipse(16, 14, 4, 5);
+
+    // Wings
+    g.fillStyle(0x2C3E7A);
+    g.fillTriangle(4, 28, 0, 40, 12, 36);
+    g.fillTriangle(32, 28, 36, 40, 24, 36);
+
+    // Engine glow
+    g.fillStyle(0x88CCFF);
+    g.fillEllipse(18, 40, 10, 6);
+    g.fillStyle(0xFF6B9D);
+    g.fillCircle(18, 41, 3);
+
+    // Wing cannons
+    g.fillStyle(0x445577);
+    g.fillRect(2, 32, 4, 6);
+    g.fillRect(30, 32, 4, 6);
+
+    g.generateTexture('player_ship', W, H);
+    g.destroy();
+  }
+
+  // ─── Enemy Ship ────────────────────────────────────────────────────────────
+  // 32×32 — menacing alien fighter
+  _genEnemyShip() {
+    const W = 32, H = 32;
+    const g = this._gfx();
+
+    // Hull (inverted "V" shape — enemies come from top so they face down)
+    g.fillStyle(0x882244);
+    g.fillTriangle(16, 30, 2, 4, 30, 4);
+
+    // Inner panel
+    g.fillStyle(0xAA3355);
+    g.fillTriangle(16, 24, 6, 6, 26, 6);
+
+    // Eye/sensor
+    g.fillStyle(0xFF3366);
+    g.fillEllipse(16, 14, 12, 10);
+    g.fillStyle(0xFF6699);
+    g.fillCircle(16, 13, 4);
+    g.fillStyle(0xFFCCDD);
+    g.fillCircle(14, 12, 2);
+
+    // Side wings
+    g.fillStyle(0x661133);
+    g.fillTriangle(2, 4, 0, 16, 8, 10);
+    g.fillTriangle(30, 4, 32, 16, 24, 10);
+
+    // Weapon tips
+    g.fillStyle(0xFF4477);
+    g.fillCircle(3, 16, 3);
+    g.fillCircle(29, 16, 3);
+
+    g.generateTexture('enemy_ship', W, H);
+    g.destroy();
+  }
+
+  // ─── Bullet (player projectile) ────────────────────────────────────────────
+  _genBullet() {
+    const W = 6, H = 18;
+    const g = this._gfx();
+
+    g.fillStyle(0x88EEFF);
+    g.fillRect(1, 0, 4, 18);
+    g.fillStyle(0xFFFFFF);
+    g.fillRect(2, 0, 2, 10);
+    g.fillStyle(0x4488FF, 0.6);
+    g.fillRect(0, 12, 6, 6);
+
+    g.generateTexture('bullet', W, H);
+    g.destroy();
+  }
+
+  // ─── Asteroid ─────────────────────────────────────────────────────────────
+  _genAsteroid() {
+    const W = 40, H = 38;
+    const g = this._gfx();
+
+    g.fillStyle(0x556677);
+    g.fillEllipse(20, 19, 38, 34);
+
+    g.fillStyle(0x667788);
+    g.fillEllipse(14, 13, 16, 14);
+    g.fillEllipse(26, 24, 12, 10);
+
+    g.fillStyle(0x445566);
+    g.fillCircle(10, 20, 5);
+    g.fillCircle(28, 10, 4);
+    g.fillCircle(22, 28, 4);
+
+    g.fillStyle(0x778899);
+    g.fillRect(18, 6, 3, 3);
+    g.fillRect(8, 14, 2, 2);
+    g.fillRect(28, 22, 2, 2);
+
+    g.generateTexture('asteroid', W, H);
+    g.destroy();
+  }
+
+  // ─── Mountain silhouette strip (480×160) — used as tiling parallax bg ─────
+  _genMountainsBg() {
+    const W = 480, H = 160;
+    const g = this._gfx();
+
+    // Dark silhouette — will show against the sunset sky gradient
+    const col = 0x18082A;
+    g.fillStyle(col);
+
+    // Mountain range — designed to tile seamlessly (left/right edges match)
+    // Big central peak
+    g.fillTriangle(170, H, 310, H - 148, 450, H);
+    // Left peak (bleeds left edge = right side of previous tile)
+    g.fillTriangle(-30, H, 70,  H - 118, 200, H);
+    // Right peek (bleeds right edge = left side of next tile)
+    g.fillTriangle(310, H, 435, H - 132, 560, H);
+    // Secondary ridges — give depth
+    g.fillTriangle(0,   H, 40,  H - 58,  90,  H);
+    g.fillTriangle(100, H, 145, H - 44,  200, H);
+    g.fillTriangle(360, H, 410, H - 62,  470, H);
+    g.fillTriangle(440, H, 480, H - 38,  530, H);
+    // Solid ground strip at bottom (ties mountains to ground)
+    g.fillRect(0, H - 18, W, 18);
+
+    // Slightly lighter layer on top of first range — adds depth
+    g.fillStyle(0x22103A);
+    g.fillTriangle(50,  H - 12, 140, H - 78,  260, H - 12);
+    g.fillTriangle(240, H - 12, 370, H - 68,  480, H - 12);
+
+    g.generateTexture('mountains_bg', W, H);
+    g.destroy();
+  }
+
+  // ─── Crystal Platform — glowing purple for staircase ───────────────────────
+  _genPlatformCrystal() {
+    const W = 32, H = 16;
+    const g = this._gfx();
+
+    // Top glow strip
+    g.fillStyle(0xDDAEFF);
+    g.fillRect(0, 0, W, 2);
+    g.fillStyle(0xCC88FF);
+    g.fillRect(0, 2, W, 3);
+
+    // Body
+    g.fillStyle(0x7733BB);
+    g.fillRect(0, 5, W, 8);
+    // Shadow
+    g.fillStyle(0x4A1A88);
+    g.fillRect(0, 13, W, 3);
+
+    // Crystal facets — bright vertical streaks
+    g.fillStyle(0xEECCFF);
+    g.fillRect(5,  5, 2, 5);
+    g.fillRect(14, 6, 2, 4);
+    g.fillRect(23, 5, 2, 5);
+
+    // Top sparkle dots
+    g.fillStyle(0xFFFFFF);
+    g.fillRect(7,  0, 2, 1);
+    g.fillRect(18, 0, 2, 1);
+    g.fillRect(28, 0, 2, 1);
+
+    g.generateTexture('platform_crystal', W, H);
+    g.destroy();
+  }
+
+  // ─── Space Power-up collectible ────────────────────────────────────────────
+  // 24×24 — glowing pink star heart hybrid
+  _genSpacePowerup() {
+    const W = 24, H = 24;
+    const g = this._gfx();
+
+    // Outer glow ring
+    g.fillStyle(0xFF6B9D, 0.35);
+    g.fillCircle(12, 12, 12);
+
+    // Star shape
+    const pts = [];
+    for (let i = 0; i < 10; i++) {
+      const r     = i % 2 === 0 ? 9 : 4;
+      const angle = (Math.PI / 5) * i - Math.PI / 2;
+      pts.push({ x: 12 + Math.cos(angle) * r, y: 12 + Math.sin(angle) * r });
+    }
+    g.fillStyle(0xFF6B9D);
+    g.fillPoints(pts, true);
+
+    // Inner highlight
+    const inner = [];
+    for (let i = 0; i < 10; i++) {
+      const r     = i % 2 === 0 ? 4 : 2;
+      const angle = (Math.PI / 5) * i - Math.PI / 2;
+      inner.push({ x: 12 + Math.cos(angle) * r, y: 12 + Math.sin(angle) * r });
+    }
+    g.fillStyle(0xFFCCEE);
+    g.fillPoints(inner, true);
+
+    g.fillStyle(0xFFFFFF);
+    g.fillRect(10, 5, 2, 2);
+    g.fillRect(14, 7, 2, 2);
+
+    g.generateTexture('space_powerup', W, H);
     g.destroy();
   }
 }

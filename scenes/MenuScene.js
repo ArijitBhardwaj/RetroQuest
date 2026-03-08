@@ -99,7 +99,7 @@ class MenuScene extends Phaser.Scene {
       shadow: { offsetX: 3, offsetY: 3, color: '#662288', blur: 0, fill: true },
     }).setOrigin(0.5);
 
-    this.add.text(cx, 286, 'to You', {
+    this.add.text(cx, 286, 'with Us', {
       fontFamily: '"Press Start 2P"',
       fontSize: '22px',
       color: '#FF6B9D',

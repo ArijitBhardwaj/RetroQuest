@@ -104,15 +104,9 @@ class Player {
     const canJump = this._coyoteTimer > 0;
     if (this._jumpTimer > 0 && canJump) {
       body.setVelocityY(PLAYER_JUMP_VEL);
-      this._jumpTimer  = 0;
+      this._jumpTimer   = 0;
       this._coyoteTimer = 0;
-    }
-
-    // ── Variable jump height (release early = shorter jump) ──
-    const jumpHeld = (cursors && cursors.up.isDown) || (cursors && cursors.space.isDown)
-                  || (mobileControls && mobileControls.jumpHeld);
-    if (!jumpHeld && body.velocity.y < -200) {
-      body.setVelocityY(body.velocity.y * 0.88);
+      if (typeof AUDIO !== 'undefined') AUDIO.jump();
     }
 
     // ── Animation state machine ──
